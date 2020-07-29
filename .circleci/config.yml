@@ -1,17 +1,32 @@
 version: 2.1
 
 jobs:
-  hello-world:
+  build-frontend:
     docker:
-      - image: amazon/aws-cli
+      - image: circleci/node:13.8.0
     steps:
       - checkout
       - run:
-          name: Say Hello
+          name: Compile front-end code
           command: |
-            echo "Hello World"
-
+            cd ./frontend/
+            npm i
+            npm run build
+    
+  build-backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run:
+          name: Compile back-end code
+          command: |
+            cd ./backend/
+            npm i
+            npm run build
+      
 workflows:
   default:
     jobs:
-      - hello-world
+      - build-frontend
+      - build-backend
